@@ -37,10 +37,11 @@ const parseDateString = (dateStr: string): Date | null => {
 
 export default function App() {
   const [principal, setPrincipal] = useState('');
-  const [startDate, setStartDate] = useState(formatDateToDDMMYYYY(getTodayIST()));
+  const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState(formatDateToDDMMYYYY(getTodayIST()));
   const [error, setError] = useState('');
   const [principalError, setPrincipalError] = useState(false);
+  const [startDateError, setStartDateError] = useState(false);
   const [results, setResults] = useState<{ dayDiff: number; data: { rate: number; interest: string }[]; startDate: string; endDate: string } | null>(null);
 
   const formatDateInput = (value: string, previousValue: string): string => {
@@ -61,36 +62,45 @@ export default function App() {
     const startDateObj = parseDateString(startDate);
     const endDateObj = parseDateString(endDate);
 
+    // Reset all errors
+    setPrincipalError(false);
+    setStartDateError(false);
+    setError('');
+
+    // Check for empty fields
     if (!principal || principal.trim() === '') {
-      setError('Principal amount is required');
       setPrincipalError(true);
+      setError('Principal amount is required');
       setResults(null);
       return;
     }
 
+    if (!startDate || startDate.trim() === '') {
+      setStartDateError(true);
+      setError('Start date is required');
+      setResults(null);
+      return;
+    }
+
+    // Validate principal amount
     if (!principalNum || isNaN(principalNum) || principalNum <= 0) {
       setError('Enter valid principal amount');
-      setPrincipalError(false);
       setResults(null);
       return;
     }
 
+    // Validate dates
     if (!startDateObj || !endDateObj) {
       setError('Enter valid dates');
-      setPrincipalError(false);
       setResults(null);
       return;
     }
 
     if (startDateObj > endDateObj) {
       setError('Start date cannot be after end date');
-      setPrincipalError(false);
       setResults(null);
       return;
     }
-
-    setError('');
-    setPrincipalError(false);
 
     const dayDiff = Math.floor(
       (endDateObj.getTime() - startDateObj.getTime()) / (1000 * 60 * 60 * 24)
@@ -125,7 +135,7 @@ export default function App() {
 
       <Text style={styles.label}>Start Date (DD/MM/YYYY)</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, startDateError && styles.inputError]}
         placeholder="DD/MM/YYYY"
         value={startDate}
         onChangeText={(value) => setStartDate(formatDateInput(value, startDate))}

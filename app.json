@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "pacs-app",
+    "name": "Pacs App",
     "slug": "pacs-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -9,9 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pixel.pacsapp"
     },
     "android": {
+      "package": "com.pixel.pacsapp",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -37,6 +39,21 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "54a9a9f1-9cd4-4b4a-808b-9e94151e28bc"
+      }
     }
   }
 }
